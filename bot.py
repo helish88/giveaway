@@ -1,79 +1,83 @@
+token = ''
+
+# Imports
 import discord
-from discord.ext import commands, menus, tasks
-import logging
+import asyncio
 import random
+import logging
 import json
 import os
 import string
 from datetime import datetime, timedelta
 
-
-import asyncio
-
-bot = commands.Bot(command_prefix='>')
-bot.remove_command('help')
+# From imports
+from discord.ext import commands, tasks
+from discord.utils import get
 
 
-@bot.event
-async def on_ready():
 
-    print('Logged in as')
-    print(bot.user.name)
-    print(bot.user.id)
-    print('------')
+# Put the channel you would like to log, when somone creates a giveaway ^^^
+intents = discord.Intents.default()
+client = commands.Bot(command_prefix = '!' , case_insensitive = True , intents = intents)
+client.remove_command('help')
 
-@bot.command()
+# Commands
+
+@client.command()
 async def test(ctx):
-    await ctx.send("test ok")
-
-@bot.command(aliases=["раздача"])
+    await ctx.send("Hello")
+    
+    
+    
+    
+# Giveaway Command
+@client.command(aliases = ['start , g'])
 async def giveaway(ctx):
-    await ctx.send(embed=discord.Embed(color=discord.Color.green(), title = "выберите канал где вы хотите проводить раздачу, к примеру #раздачи")) #select channel for giveaway,for example #giveaway
+    await ctx.send(embed=discord.Embed(color=discord.Color.green(), title = "Select the channel, you would like the giveaway to be in"))
     def check(m):
         return m.author == ctx.author and m.channel == ctx.channel
     try:
-        msg1 = await bot.wait_for('message', check = check, timeout=30.0)
+        msg1 = await client.wait_for('message', check = check, timeout=30.0)
 
         channel_converter = discord.ext.commands.TextChannelConverter()
         try:
-            channel = await channel_converter.convert(ctx, msg1.content)
+            giveawaychannel = await channel_converter.convert(ctx, msg1.content)
         except commands.BadArgument:
-            return await ctx.send(embed=discord.Embed(color=discord.Color.red(), title = "Такого канала не существует,пробуйте заново")) #this channel does not exist,please select another channel
+            return await ctx.send(embed=discord.Embed(color=discord.Color.red(), title = "This channel doesn't exist, please try again"))
 
     except asyncio.TimeoutError:
-        await ctx.send("таймоут, напишите команду еще раз") # time out, try again
-    if not channel.permissions_for(ctx.guild.me).send_messages or  not channel.permissions_for(ctx.guild.me).add_reactions:
-        return await ctx.send(embed=discord.Embed(color=discord.Color.red(), description = f"У меня нет права отправлять сообщение и(или) добавлять реакции(емози) в канале {channel}")) #bot don't have permissions to send channel or/and add reactions in #channel
-    await ctx.send(embed=discord.Embed(color=discord.Color.green(), description = f"ок, канал {channel.mention} выбран для раздачи,сколько победителей хотите?(Напишите число)")) #ok, channel {channel.mention} is selected for giveaway, how many winners do you want? (write number) 
+        await ctx.send("You took to long, please try again!")
+    if not giveawaychannel.permissions_for(ctx.guild.me).send_messages or  not giveawaychannel.permissions_for(ctx.guild.me).add_reactions:
+        return await ctx.send(embed=discord.Embed(color=discord.Color.red(), description = f"Bot does not have correct permissions to send in: {giveawaychannel}\n **Permissions needed:** ``Add reactions | Send messages``"))
+
+    await ctx.send(embed=discord.Embed(color=discord.Color.green(), title = "How many winners to the giveaway would you like?"))
     try:
-        msg2 = await bot.wait_for('message', check = check, timeout=30.0)
+        msg2 = await client.wait_for('message', check = check, timeout=30.0)
         try:
             winerscount = int(msg2.content)
         except ValueError:
-            return await ctx.send(embed=discord.Embed(color=discord.Color.red(), title = "Вы не указали число, начните все заново")) #You didn't specify a number, write command again
+            return await ctx.send(embed=discord.Embed(color=discord.Color.red(), title = "You didn't specify a number of winners, please try again."))
 
     except asyncio.TimeoutError:
-        await ctx.send("таймоут, напишите команду еще раз") # time out,try again
+        await ctx.send("You took to long, please try again!")
 
-    await ctx.send(embed=discord.Embed(color=discord.Color.green(), title = "Укажите время для giveaway, можете указать к примеру: 20 часов, 4 дня, 5 минут (все через пробел)")) #Specify the time for giveaway, you can specify for example: 20 hours, 4 days, 5 minutes (all separated by a space)
+    await ctx.send(embed=discord.Embed(color=discord.Color.green(), title = "What would you like the time to be for the giveaway (Example: 10 hours, 3 days, 5 minutes.)"))
     try:
-        since = await bot.wait_for('message', check = check, timeout=30.0)
+        since = await client.wait_for('message', check = check, timeout=30.0)
 
     except asyncio.TimeoutError:
-        await ctx.send("таймоут, напишите команду еще раз") # time out,try again
+        await ctx.send("You took to long, please try again!")
 
 
-    seconds = ("s", "sec", "secs", 'second', "seconds", "c", "сек", "секунда", 'секунду', "секунды", "секунд")
-    minutes= ("min", "mins", "minute", "minutes", "мин", "минута", "минуту", 'минуты', 'минут')
-    hours= ("h", "hour", "hours", "ч", 'час', 'часа', "часов")
-    days = ("d", "day", "days", "д", 'день', 'дня', 'дней')
-    weeks = ("w", "week", "weeks", "н", 'нед', 'неделя', "недели", "недель", "неделю")
-    months = ("mo", "mos", "month", "months", "мес", "месяц", "месяца", 'месяцев')
+    seconds = ("s", "sec", "secs", 'second', "seconds")
+    minutes= ("m", "min", "mins", "minute", "minutes")
+    hours= ("h", "hour", "hours")
+    days = ("d", "day", "days")
     rawsince = since.content
     try:
         time = int(since.content.split(" ")[0])
     except ValueError:
-        return await ctx.send(embed=discord.Embed(color=discord.Color.red(), title = "вы не указали единицу времени к примеру секунд,минут. Напишите команду заново")) #you have not specified a unit of time, for example seconds, minutes. write command again
+        return await ctx.send(embed=discord.Embed(color=discord.Color.red(), title = "You did not specify a unit of time, please try again."))
     since = since.content.split(" ")[1]
     if since.lower() in seconds:
         timewait = time
@@ -86,32 +90,75 @@ async def giveaway(ctx):
     elif since.lower() in weeks:
         timewait = time*604800
     else:
-        return await ctx.send(embed=discord.Embed(color=discord.Color.red(), title = "вы не указали единицу времени к примеру секунд,минут. Напишите команду заново")) #you have not specified a unit of time, for example seconds, minutes. write command again
-    await ctx.send("Укажите приз какой хотите разыграть")
+        return await ctx.send(embed=discord.Embed(color=discord.Color.red(), title = "You did not specify a unit of time, please try again."))
+        
+    prizeembed = discord.Embed(title = "What would you like the prize to be?" , color = discord.Color.green())
+    await ctx.send(embed = prizeembed)
     try:
-        msg4 = await bot.wait_for('message', check = check, timeout=30.0)
+        msg4 = await client.wait_for('message', check = check, timeout=30.0)
 
 
     except asyncio.TimeoutError:
-        await ctx.send("таймоут, напишите команду еще раз") #time out,try again
-    await ctx.send(embed = discord.Embed(color=discord.Color.green(), description = f"Приз: {msg4.content}\nколичество победителей: {winerscount}\nканал: {channel.mention}\nчерез {rawsince} ")) # prize -  msg4.content winners count- winnerscount. channel- channel, giveaway after - rawsince 
+        await ctx.send("You took to long, please try again.")
+
+    logembed = discord.Embed(title = "Giveaway Logged" , description = f"**Prize:** ``{msg4.content}``\n**Winners:** ``{winerscount}``\n**Channel:** {giveawaychannel.mention}\n**Host:** {ctx.author.mention}" , color = discord.Color.red())
+    logembed.set_thumbnail(url = ctx.author.avatar_url)
+    
+    guild = client.get_guild(798256110426783775) # Put your guild ID here!
+    logchannel = guild.get_channel(798293394896060486) # Put your channel, you would like to send giveaway logs to.
+    await logchannel.send(embed = logembed)
 
     futuredate = datetime.utcnow() + timedelta(seconds=timewait)
-    embed1 = discord.Embed(color = discord.Color(random.randint(0x000000, 0xFFFFFF)), title=f"🎉 Новая раздача🎉\n`{msg4.content}`",timestamp = futuredate, description="Добавьте реакцию 🎉 что бы участвовать" ) #Add reaction 🎉 to participate
-    embed1.set_footer(text=f"раздача закончится") #when giveaway over
-    msg = await channel.send(embed=embed1)
+    embed1 = discord.Embed(color = discord.Color(random.randint(0x000000, 0xFFFFFF)), title=f"🎉GIVEAWAY🎉\n`{msg4.content}`",timestamp = futuredate, description=f'React with 🎉 to enter!\nEnd Date: {futuredate.strftime("%a, %b %d, %Y %I:%M %p")}\nHosted by: {ctx.author.mention}')
+    
+    embed1.set_footer(text=f"Giveaway will end")
+    msg = await giveawaychannel.send(embed=embed1)
     await msg.add_reaction("🎉")
     await asyncio.sleep(timewait)
-    message = await channel.fetch_message(msg.id)
+    message = await giveawaychannel.fetch_message(msg.id)
     for reaction in message.reactions:
         if str(reaction.emoji) == "🎉":
             users = await reaction.users().flatten()
             if len(users) == 1:
-                return await msg.edit(embed=discord.Embed(title="победителей нет")) # no winners
+                return await msg.edit(embed=discord.Embed(title="Nobody has won"))
 
     winners = random.sample([user for user in users if not user.bot], k=winerscount)
+    
     await message.clear_reactions()
-    emozi='<a:hypertada:677073826265300992>'
     winnerstosend = "\n".join([winner.mention for winner in winners])
-    await msg.edit(embed=discord.Embed(title=f"{emozi} победитель {emozi}", description=f"выиграл(и)\n{winnerstosend}",color=discord.Color.blue()).add_field(name=f"приз", value=f"`{msg4.content}`", inline=False)) # winner
-bot.run(os.environ["TESTBOT"])
+
+    win = await msg.edit(embed = discord.Embed(title = "WINNER" , description = f"Congratulations {winnerstosend}, you have won **{msg4.content}**!" , color = discord.Color.blue()))
+    await giveawaychannel.send(embed = embed)
+    
+
+    
+    
+@client.command()
+async def ping(ctx):
+    ping = client.latency
+    await ctx.send(f"The bot's ping is: ``{round(ping * 1000)}ms``")
+
+
+
+# Fixed by: FakeBlob#0001 if there are any errors please contact me on Discord: FakeBlob#0001
+# Join my discord and contact me there if my DMS are off. https://dsc.gg/free-stuff
+    
+    
+
+    
+
+
+
+
+
+
+
+# Events
+@client.event
+async def on_ready():
+
+    print('Logged in as')
+    print(client.user.name)
+    print(client.user.id)
+    print('------')
+client.run(token)
