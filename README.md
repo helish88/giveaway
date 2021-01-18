@@ -1,4 +1,4 @@
-![Contributors][contributors-shield]][https://github.com/blobonmyknob/giveaway/graphs/contributors]
+![contributors-shield]][https://github.com/blobonmyknob/giveaway/graphs/contributors]
 
 
 # Giveaway Bot (Discord.py)
