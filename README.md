@@ -1,7 +1,4 @@
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
+
 # Giveaway Bot (Discord.py)
 This bot is originally forked by: <a href="https://github.com/helish88/giveaway">this repo.</a>
 It has been redone by me!
