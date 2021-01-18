@@ -1,3 +1,5 @@
+[![Contributors][contributors-shield]][https://github.com/blobonmyknob/giveaway/graphs/contributors]
+
 
 # Giveaway Bot (Discord.py)
 This bot is originally forked by: <a href="https://github.com/helish88/giveaway">this repo.</a>
