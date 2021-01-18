@@ -4,19 +4,19 @@ It has been redone by me!
 
 # Features and screenshots
 
-**Giveaway Prompt**
-https://imgur.com/gIbeXoI
-https://imgur.com/f03Ykjt
-https://imgur.com/2iBlavx
-https://imgur.com/9anaIsO
-https://imgur.com/JIX4YF5
+**Giveaway Prompt** <br/>
+https://imgur.com/gIbeXoI <br/>
+https://imgur.com/f03Ykjt <br/>
+https://imgur.com/2iBlavx <br/>
+https://imgur.com/9anaIsO <br/>
+https://imgur.com/JIX4YF5 <br/>
 
 
-**Giveaway Message**
-https://imgur.com/ZzQV2m6
+**Giveaway Message** <br/>
+https://imgur.com/ZzQV2m6 <br/>
 
 **Giveaway Log**
-https://imgur.com/8U7H6f5
+https://imgur.com/8U7H6f5 <br/>
 
 
 
