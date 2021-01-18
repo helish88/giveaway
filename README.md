@@ -12,5 +12,5 @@ I noticed that this repo had errors, and was in Russian.
 
 # Contact me
 If there are any errors for this bot feel free to contact me here:
-**In my server:** https://dsc.gg/free-stuff
-**Through Direct Messages:** @FakeBlob#0001 (Discord)
+- **In my server:** https://dsc.gg/free-stuff
+- **Through Direct Messages:** @FakeBlob#0001 (Discord)
