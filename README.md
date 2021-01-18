@@ -5,18 +5,18 @@ It has been redone by me!
 # Features and screenshots
 
 **Giveaway Prompt** <br/>
-! [Selecting a channel](https://imgur.com/gIbeXoI) <br/>
-! [Selecting number of winners](https://imgur.com/f03Ykjt) <br/>
-! [Selecting Time](https://imgur.com/2iBlavx) <br/>
-! [Selecting Time](https://imgur.com/9anaIsO) <br/>
-! [Selecting Prize](https://imgur.com/JIX4YF5) <br/>
+![Selecting a channel](https://imgur.com/gIbeXoI) <br/>
+![Selecting number of winners](https://imgur.com/f03Ykjt) <br/>
+![Selecting Time](https://imgur.com/2iBlavx) <br/>
+![Selecting Time](https://imgur.com/9anaIsO) <br/>
+![Selecting Prize](https://imgur.com/JIX4YF5) <br/>
 
 
 **Giveaway Message** <br/>
-! [Giveaway Message](https://imgur.com/ZzQV2m6) <br/>
+![Giveaway Message](https://imgur.com/ZzQV2m6) <br/>
 
 **Giveaway Log**
-! [Giveaway Log](https://imgur.com/8U7H6f5) <br/>
+![Giveaway Log](https://imgur.com/8U7H6f5) <br/>
 
 
 
