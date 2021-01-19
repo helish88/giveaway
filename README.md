@@ -18,7 +18,7 @@ It has been redone by me!
 
 # Contact me
 If there are any errors for this bot feel free to contact me here:
-- **In my server:** https://dsc.gg/free-stuff
+- **In my server:** coming soon
 - **Through Direct Messages:** @FakeBlob#0001 (Discord)
 
 
