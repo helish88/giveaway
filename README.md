@@ -11,8 +11,8 @@ It has been redone by me!
 
 # What I fixed / Added
 - Major version errors
-- Transelated Russian to English
-- Made embeds more clean
+- Translated Russian text to English.
+- Made embeds more clean.
 - Added a logging system (Can be set up by inserting your guild ID and the channel ID you would like it to send too.)
 - Switched unessesary code, and made it more simple.
 - Reroll Command.
