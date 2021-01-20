@@ -1,4 +1,4 @@
-token = ''
+token = '' # Input your token here.
 
 # Imports
 import discord
@@ -8,11 +8,14 @@ import logging
 import json
 import os
 import string
-from datetime import datetime, timedelta
+
+
 
 # From imports
 from discord.ext import commands, tasks
 from discord.utils import get
+from datetime import datetime, timedelta
+from colorama import Fore, Back, Style
 
 
 
@@ -32,6 +35,7 @@ async def test(ctx):
     
 # Giveaway Command
 @client.command(aliases = ['start , g'])
+@commands.has_permissions(manage_guild = True)
 async def giveaway(ctx):
     await ctx.send(embed=discord.Embed(color=discord.Color.green(), title = "Select the channel, you would like the giveaway to be in"))
     def check(m):
@@ -61,7 +65,7 @@ async def giveaway(ctx):
     except asyncio.TimeoutError:
         await ctx.send("You took to long, please try again!")
 
-    await ctx.send(embed=discord.Embed(color=discord.Color.green(), title = "What would you like the time to be for the giveaway (Example: 10 hours, 3 days, 5 minutes.)"))
+    await ctx.send(embed=discord.Embed(color=discord.Color.green(), title = "Select an amount of time for the giveaway."))
     try:
         since = await client.wait_for('message', check = check, timeout=30.0)
 
@@ -104,8 +108,8 @@ async def giveaway(ctx):
     logembed = discord.Embed(title = "Giveaway Logged" , description = f"**Prize:** ``{msg4.content}``\n**Winners:** ``{winerscount}``\n**Channel:** {giveawaychannel.mention}\n**Host:** {ctx.author.mention}" , color = discord.Color.red())
     logembed.set_thumbnail(url = ctx.author.avatar_url)
     
-    guild = client.get_guild(798256110426783775) # Put your guild ID here!
-    logchannel = guild.get_channel(798293394896060486) # Put your channel, you would like to send giveaway logs to.
+    guild = client.get_guild(796081913688883240) # Put your guild ID here!
+    logchannel = guild.get_channel(799722523054833664) # Put your channel, you would like to send giveaway logs to.
     await logchannel.send(embed = logembed)
 
     futuredate = datetime.utcnow() + timedelta(seconds=timewait)
@@ -124,24 +128,31 @@ async def giveaway(ctx):
 
     winners = random.sample([user for user in users if not user.bot], k=winerscount)
     
-    await message.clear_reactions()
+    #await message.clear_reactions()
     winnerstosend = "\n".join([winner.mention for winner in winners])
 
     win = await msg.edit(embed = discord.Embed(title = "WINNER" , description = f"Congratulations {winnerstosend}, you have won **{msg4.content}**!" , color = discord.Color.blue()))
-    await giveawaychannel.send(embed = embed)
     
-
     
+# Reroll command, used for chosing a new random winner in the giveaway
+@client.command()
+@commands.has_permissions(manage_guild = True)
+async def reroll(ctx):
+    async for message in ctx.channel.history(limit=100 , oldest_first = False):
+        if message.author.id == client.user.id and message.embeds:
+            reroll = await ctx.fetch_message(message.id)
+            users = await reroll.reactions[0].users().flatten()
+            users.pop(users.index(client.user))
+            winner = random.choice(users)
+            await ctx.send(f"The new winner is {winner.mention}")
+            break
+    else:
+        await ctx.send("No giveaways going on in this channel.")
     
 @client.command()
 async def ping(ctx):
     ping = client.latency
     await ctx.send(f"The bot's ping is: ``{round(ping * 1000)}ms``")
-
-
-
-# Fixed by: FakeBlob#0001 if there are any errors please contact me on Discord: FakeBlob#0001
-# Join my discord and contact me there if my DMS are off. https://dsc.gg/free-stuff
     
     
 
@@ -157,8 +168,7 @@ async def ping(ctx):
 @client.event
 async def on_ready():
 
-    print('Logged in as')
-    print(client.user.name)
-    print(client.user.id)
-    print('------')
+    print(Fore.RED + 'Logged in as')
+    print(Fore.GREEN + client.user.name)
+    print(Style.RESET_ALL)
 client.run(token)
