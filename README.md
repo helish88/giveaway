@@ -2,7 +2,7 @@
 
 
 # Giveaway Bot (Discord.py)
-Giveaway bot, maintained by Blob and Helish.
+Giveaway bot, maintained by FakeBlob and helish.
 
 
 
