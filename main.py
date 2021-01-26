@@ -23,7 +23,6 @@ bot.remove_command('help')
 @commands.has_permissions(manage_guild=True)
 async def giveaway(ctx):
     await ctx.send("Select the channel, you would like the giveaway to be in.")
-    giveawaychannel = None
 
     def check(m):
         return m.author == ctx.author and m.channel == ctx.channel
