@@ -30,7 +30,7 @@ bot.remove_command('help')
 
 # Giveaway Command
 @bot.command(aliases = ['start' , 'g'])
-@commands.has_permissions(manage_guild = True)
+@commands.has_permissions(manage_roles = True)
 async def giveaway(ctx):
     await ctx.send("Select the channel, you would like the giveaway to be in.")
     def check(m):
@@ -184,14 +184,14 @@ async def reroll(ctx):
         
 # Pickwinner / Rigged Giveaway Command.
 @bot.command(aliases = ['pick' , 'rig' , 'rigged'])
-@commands.has_permissions(administrator = True)
+@commands.has_permissions(manage_guild = True)
 
 async def pickwinner(ctx , user: discord.Member = None):
     
     await ctx.send("Who would you like to be the winner?")
     
 @bot.command()
-@commands.has_permissions(manage_guild = True)
+@commands.has_permissions(manage_roles = True)
 async def g(ctx , winners , time , prize):
     await ctx.send(f"Giveaway for {prize}, has been started with {winners}, and time has been set to {time}.\nGiveaway started by: {ctx.author.mention}")
     
@@ -216,7 +216,7 @@ async def ping(ctx):
 @giveaway.error
 async def giveaway_error(ctx, error):
     if isinstance(error, MissingPermissions):
-        await ctx.send(f"ERROR: Hello {ctx.author}, it seems you have encountered an error.\nYou are missing the following permissions: ``Manage Server``\nYou cannot create a giveaway without theese permissions.")
+        await ctx.send(f"ERROR: Hello {ctx.author}, it seems you have encountered an error.\nYou are missing the following permissions: ``Manage Roles``\nYou cannot create a giveaway without theese permissions.")
         print(Fore.WHITE + ctx.author , 'encountered an error:\n' , Fore.RED + 'Missing Permissions\n' , Fore.WHITE + "Command:" , Fore.GREEN + 'Giveaway [SIMPLE]')
 
 @reroll.error
@@ -233,12 +233,12 @@ async def reroll_error(ctx, error):
 #@g.error
 #async def g_error(ctx, error):
     #if isinstance(error, MissingPermissions):
-        #await ctx.send(f"ERROR: Hello {ctx.author}, it seems you have encountered an error.\nYou are missing the following permissions: ``Manage Server``\nYou cannot start a giveaway without theese permissions.")
+        #await ctx.send(f"ERROR: Hello {ctx.author}, it seems you have encountered an error.\nYou are missing the following permissions: ``Manage Roles``\nYou cannot start a giveaway without theese permissions.")
         #print(Fore.WHITE + ctx.author , 'encountered an error:\n' , Fore.RED + 'Missing Permissions\n' , Fore.WHITE + "Command:" , Fore.GREEN + #'Giveaway [ADVANCED]')
 
 #@pickwinner.error
 #async def pickwinner_error(ctx, error):
-    #await ctx.send(f"ERROR: Hello {ctx.author}, it seems you have encountered an error.\nYou are missing the following permissions: #``Administrator``\nYou cannot pick the winner of the giveaway without theese permissions.")
+    #await ctx.send(f"ERROR: Hello {ctx.author}, it seems you have encountered an error.\nYou are missing the following permissions: #``Manage Server``\nYou cannot pick the winner of the giveaway without theese permissions.")
 #print(Fore.WHITE + ctx.author , 'encountered an error:\n' , Fore.RED + 'Missing Permissions\n' , Fore.WHITE + "Command:" , Fore.GREEN + 'Giveaway [ADVANCED]')
 
 
