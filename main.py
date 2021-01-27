@@ -29,7 +29,7 @@ bot.remove_command('help')
 # Commands
 
 # Giveaway Command
-@bot.command(aliases = ['start , g'])
+@bot.command(aliases = ['start' , 'g'])
 @commands.has_permissions(manage_guild = True)
 async def giveaway(ctx):
     await ctx.send("Select the channel, you would like the giveaway to be in.")
